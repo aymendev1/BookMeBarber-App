@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap");
+:root {
+  --orange: #fc653c;
+  --Dark: #1a1a1a;
+  --grey: #606060;
+}
+.App {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: white;
+  font-family: "Lato", sans-serif;
+  gap: 3rem;
+}
+.btn {
+  background-color: var(--orange);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  text-transform: capitalize;
+  font-size: medium;
+}
+.btn:hover {
+  cursor: pointer;
+}

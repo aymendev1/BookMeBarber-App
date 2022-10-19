@@ -1,0 +1,100 @@
+.mainSection {
+  background-image: url("../../assets/background.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.cardOverlay {
+  background: rgba(0, 0, 0, 0.3);
+  height: 100%;
+}
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: 10px 50px;
+  height: 100%;
+}
+.left-m {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  flex: 2;
+}
+.left-m > :nth-child(1),
+.left-m > :nth-child(2) {
+  font-size: 3rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 5px 0;
+}
+.left-m > :nth-child(3) {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  padding: 5px 0;
+}
+.left-m > button {
+  margin: 2rem 0;
+}
+
+.right-m {
+  display: flex;
+  flex-direction: column;
+  flex: 2 1;
+  align-items: center;
+}
+.appointmentCard {
+  background: rgba(46, 46, 46, 0.2);
+  box-shadow: 0 8px 32px 0 rgb(176 124 80);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(13px);
+  border-radius: 10px;
+  padding: 2rem;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+  gap: 1rem;
+  width: 300px;
+}
+.appointmentCard > span {
+  font-size: 2rem;
+  letter-spacing: 2px;
+  padding: 5px 0;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.appointmentCard > form {
+  display: flex;
+  gap: 0.6rem;
+}
+.appointmentCard > form > input {
+  background-color: transparent;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 10px 20px 10px 0px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid white;
+  width: 260px;
+}
+.appointmentCard > form > input::placeholder {
+  color: rgba(255, 255, 255, 0.452);
+  font-weight: 400;
+}
+.btnBook {
+  margin: 1rem 0;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
