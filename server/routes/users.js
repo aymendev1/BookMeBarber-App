@@ -27,15 +27,8 @@ const {
 } = require("../middleware/auth");
 
 router.post("/signup", (req, res, next) => {
-  console.log({
-    UserLoginId: GenerateUserLoginID(),
-    email: req.body.email,
-    password: req.body.password,
-    role: req.body.role,
-    username: req.body.username,
-  });
   // Verify that first name is not empty
-  if (!req.body.email || !req.body.password || !req.body.role) {
+  if (!req.body.username || !req.body.password || !req.body.role) {
     res.statusCode = 500;
     res.send({
       name: "Data Entry Error",
@@ -45,8 +38,6 @@ router.post("/signup", (req, res, next) => {
     User.register(
       new User({
         UserLoginID: GenerateUserLoginID(),
-        email: req.body.email,
-
         role: req.body.role,
         username: req.body.username,
       }),
@@ -80,6 +71,10 @@ router.post("/signup", (req, res, next) => {
   }
 });
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
+  console.log({
+    username: req.body.username,
+    password: req.body.password,
+  });
   const token = getToken({ _id: req.user._id });
   const refreshToken = getRefreshToken({ _id: req.user._id });
   User.findById(req.user._id).then(

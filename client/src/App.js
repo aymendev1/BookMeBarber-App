@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import MainSection from "./components/mainSection/main";
 import LoginPage from "./components/Login/login";
+import DashboardEmployee from "./components/DashboardEmployee/dashboardEmployee";
 function App() {
   // const homePage = createBrowserRouter([
   //   {
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainSection />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<DashboardEmployee />} />
         </Routes>
       </BrowserRouter>
     </div>
