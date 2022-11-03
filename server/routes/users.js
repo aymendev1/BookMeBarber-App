@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserSchema");
+const Employee = require("../models/EmployeeSchema");
 const passport = require("passport");
 
 function GenerateUserLoginID() {
@@ -150,7 +151,9 @@ router.post("/refreshToken", (req, res, next) => {
   }
 });
 router.get("/user", verifyUser, (req, res, next) => {
-  res.send(req.user);
+  res.send(req.user.UserLoginID);
+  const userID = req.user.UserLoginID;
+  Adventure.findOne({ country: "Croatia" }, function (err, adventure) {});
 });
 router.get("/logout", verifyUser, (req, res, next) => {
   const { signedCookies = {} } = req;
