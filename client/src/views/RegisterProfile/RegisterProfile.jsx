@@ -146,7 +146,7 @@ export default function ProfileView() {
   ) : (
     <main class="content-wrap">
       <header class="content-head">
-        <h1>Edit Profile</h1>
+        <h1>Register Employee</h1>
       </header>
       <div className="content">
         <div className="container">
