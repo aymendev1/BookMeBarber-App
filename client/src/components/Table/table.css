@@ -1,0 +1,26 @@
+.tableHome {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: white;
+}
+thead {
+  border-bottom-width: 1px;
+}
+th {
+  background: white;
+  color: black;
+  font-weight: 600;
+  font-family: "Lato", sans-serif;
+  padding: 10px;
+  color: #a3a3a3;
+  text-align: left;
+  width: max-content;
+}
+.tableContent {
+  color: black;
+  padding: 10px;
+  font-weight: 600;
+  font-family: "Lato", sans-serif;
+  padding: 10px;
+  width: max-content;
+}

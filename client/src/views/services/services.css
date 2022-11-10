@@ -1,0 +1,51 @@
+.services h2 {
+  color: #4b84fe;
+  width: 40%;
+  border-top: 1px solid black;
+  padding-top: 20px;
+}
+.services hr {
+  width: 40%;
+  writing-mode: tb-rl;
+}
+.display_container {
+  grid-area: 1 / 1 / 2 / 2;
+  margin: 0 1rem;
+}
+.inputorder_container {
+  grid-area: 1 / 2 / 2 / 3;
+  width: fit-content;
+}
+.inputorder_container .tableBox > form {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+.inputServices {
+  flex-direction: row;
+}
+.tableBox > form > div > span {
+  font-weight: 600;
+  font-family: "Lato", sans-serif;
+  padding: 10px;
+  color: #a3a3a3;
+  margin-right: 10px;
+}
+.tableBox > form > div > input {
+  font-weight: 600;
+  font-family: "Lato", sans-serif;
+  color: black;
+  font-size: 1rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid black;
+  padding: 10px 20px 10px 0;
+  margin: 15px 0px;
+  outline: none;
+}
+.tableBox > form > div > input::placeholder {
+  opacity: 30%;
+}
+.btnService {
+  height: 50px;
+}

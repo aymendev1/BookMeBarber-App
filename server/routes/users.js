@@ -2,23 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserSchema");
-const Employee = require("../models/EmployeeSchema");
+const Employee = require("../models/employeeSchema");
 const passport = require("passport");
-
-function GenerateUserLoginID() {
-  var result = "";
-  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var Numbers = "1234567890";
-  var charactersLength = characters.length;
-  var NumbersLength = Numbers.length;
-  for (var i = 0; i < 5; i++) {
-    if (i <= 2) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    result += Numbers.charAt(Math.floor(Math.random() * NumbersLength));
-  }
-  return result;
-}
 
 const {
   getToken,
@@ -29,53 +14,51 @@ const {
 
 router.post("/signup", (req, res, next) => {
   // Verify that first name is not empty
-  if (!req.body.username || !req.body.password || !req.body.role) {
+  if (!req.body.EmployeeEmail || !req.body.Password) {
     res.statusCode = 500;
     res.send({
       name: "Data Entry Error",
       message: "Please check the Data Entry",
     });
   } else {
-    User.register(
-      new User({
-        UserLoginID: GenerateUserLoginID(),
-        role: req.body.role,
-        username: req.body.username,
-      }),
-      req.body.password,
-      (err, user) => {
-        if (err) {
-          res.statusCode = 500;
-          console.log("500");
-          res.send(err);
-        } else {
-          //user.email = req.body.email;
-          //user.role = req.body.role || "";
-          //user.username = req.body.username;
-          //user.password = String(req.body.password);
-          const token = getToken({ _id: user._id });
-          const refreshToken = getRefreshToken({ _id: user._id });
-          user.refreshToken.push({ refreshToken });
-          user.save((err, user) => {
+    Employee.findOne({ email: req.body.EmployeeEmail }, function (err, result) {
+      if (!err) {
+        const EmpId = result.employeeID;
+        User.register(
+          new User({
+            UserLoginID: EmpId,
+            username: req.body.EmployeeEmail,
+          }),
+          req.body.Password,
+          (err, user) => {
             if (err) {
               res.statusCode = 500;
-              console.log("5002");
-              res.send(err);
+              res.send({ message: "Registration Failed", info: err });
             } else {
-              res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-              res.send({ success: true, token });
+              const token = getToken({ _id: user._id });
+              const refreshToken = getRefreshToken({ _id: user._id });
+              user.refreshToken.push({ refreshToken });
+              user.save((err, user) => {
+                if (err) {
+                  res.statusCode = 500;
+                  res.send({ message: "Registration Failed", info: err });
+                } else {
+                  res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
+                  res.statusCode = 200;
+                  res.send({ success: true, token });
+                }
+              });
             }
-          });
-        }
+          }
+        );
+      } else if (err) {
+        res.statusCode = 500;
+        res.send({ message: "User Not Found", info: err });
       }
-    );
+    });
   }
 });
 router.post("/login", passport.authenticate("local"), (req, res, next) => {
-  console.log({
-    username: req.body.username,
-    password: req.body.password,
-  });
   const token = getToken({ _id: req.user._id });
   const refreshToken = getRefreshToken({ _id: req.user._id });
   User.findById(req.user._id).then(
@@ -83,15 +66,16 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
       user.refreshToken.push({ refreshToken });
       user.save((err, user) => {
         if (err) {
-          res.statusCode = 500;
-          res.send(err);
+          res.sendStatus(500).send(err);
         } else {
           res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
           res.send({ success: true, token });
         }
       });
     },
-    (err) => next(err)
+    (err) => {
+      res.sendStatus(500).send("Password error");
+    }
   );
 });
 
@@ -118,7 +102,7 @@ router.post("/refreshToken", (req, res, next) => {
 
             if (tokenIndex === -1) {
               res.statusCode = 401;
-              res.send("Unauthorized");
+              res.send("Unauthorized here");
             } else {
               const token = getToken({ _id: userId });
               // If the refresh token exists, then create new one and replace it.
@@ -143,7 +127,7 @@ router.post("/refreshToken", (req, res, next) => {
       );
     } catch (err) {
       res.statusCode = 401;
-      res.send("Unauthorized");
+      res.send("Unauthorized " + err.message);
     }
   } else {
     res.statusCode = 401;
@@ -151,9 +135,34 @@ router.post("/refreshToken", (req, res, next) => {
   }
 });
 router.get("/user", verifyUser, (req, res, next) => {
-  res.send(req.user.UserLoginID);
+  // Reading the userID from the req and returning the user
   const userID = req.user.UserLoginID;
-  Adventure.findOne({ country: "Croatia" }, function (err, adventure) {});
+  Employee.findOne({ employeeID: userID }, function (err, user) {
+    if (!err) {
+      res.send(user);
+    } else {
+      res.send(err.message);
+    }
+  });
+});
+router.post("/passUpdate", (req, res, next) => {
+  const { email, Password } = req.body;
+  User.findByUsername(email).then(
+    function (sanitizedUser) {
+      if (sanitizedUser) {
+        sanitizedUser.setPassword(Password, function () {
+          sanitizedUser.save();
+          console.log("Password Changed");
+          res.status(200).send("Password Changed");
+        });
+      } else {
+        res.status(400);
+      }
+    },
+    function (err) {
+      res.send(err.message);
+    }
+  );
 });
 router.get("/logout", verifyUser, (req, res, next) => {
   const { signedCookies = {} } = req;

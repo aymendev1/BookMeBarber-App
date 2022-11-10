@@ -5,7 +5,8 @@ const passport = require("passport");
 const session = require("express-session");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "10mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 app.use(express.json());
 require("dotenv").config({
   path: "config/.env",

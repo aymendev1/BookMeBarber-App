@@ -1,0 +1,12 @@
+.home_container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: #ffb9a61f;
+  padding: 2rem 0.5rem;
+}
+.order_container {
+  width: 90%;
+  align-self: center;
+}

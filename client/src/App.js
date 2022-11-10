@@ -1,14 +1,17 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainSection from "./components/mainSection/main";
-import LoginPage from "./components/Login/login";
+import MainSection from "./views/mainSection/main";
+import LoginPage from "./views/Login/login";
 import DashboardLayout from "./layout/DashboardLayout";
-import Dashboard from "./components/DashboardEmployee/dashboardEmployee";
 import Home from "./views/home/home";
 import Orders from "./views/orders/orders";
 import Services from "./views/services/services";
 import Profile from "./views/profile/Profile";
+import LoginSetting from "./views/loginSetting/loginSettings";
+import AdminSetting from "./views/RegisterProfile/RegisterProfile";
+import AdminOrders from "./views/orders/ordersAdmin";
+import AdminEmployees from "./views/employees/employees";
 import { UserProvider } from "./context/UserContext";
 function App() {
   return (
@@ -23,6 +26,10 @@ function App() {
               <Route path="orders" element={<Orders />} />
               <Route path="services" element={<Services />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="loginSetting" element={<LoginSetting />} />
+              <Route path="AdminSetting" element={<AdminSetting />} />
+              <Route path="AdminOrders" element={<AdminOrders />} />
+              <Route path="ViewEmployees" element={<AdminEmployees />} />
             </Route>
           </Routes>
         </BrowserRouter>

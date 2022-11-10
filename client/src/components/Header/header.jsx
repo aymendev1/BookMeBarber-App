@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./header.css";
 import logo from "../../assets/logo.png";
 export default function Header() {
@@ -14,7 +15,11 @@ export default function Header() {
         <span>Contact US</span>
       </div>
       <div className="right-h">
-        <button className="btn btn-login">login</button>
+        <button className="btn btn-login">
+          <Link to="/login" key="1">
+            Login
+          </Link>
+        </button>
       </div>
     </div>
   );

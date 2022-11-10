@@ -1,42 +1,108 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import "./main.css";
-import Header from "../Header/header";
+
+import Header from "../../components/Header/header";
 
 export default function Main() {
   const [name, setName] = useState("");
   const [PhoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [BarberName, setBarberName] = useState("");
+  const [BarberInfos, setBarberInfos] = useState([]);
   const [Service, setService] = useState("");
   const [Date, setDate] = useState("");
+  const [ErrorMsg, setError] = useState();
+  let today = new window.Date().toISOString().substring(0, 16);
+  const fetchUserDetails = useCallback(() => {
+    setError();
+    axios({
+      method: "get",
+      url: "/employee/general_infos",
+      withCredentials: true,
+      headers: {
+        "Content-type": "application/json",
+      },
+    }).then(async (response) => {
+      if (response.status === 200) {
+        const newdata = await response.data;
+        // Setting the new data to State
+        setBarberInfos(newdata.data);
+      } else {
+        if (response.status === 401) {
+          // Edge case: when the token has expired.
+          // This could happen if the refreshToken calls have failed due to network error or
+          // User has had the tab open from previous day and tries to click on the Fetch button
+          window.location.reload();
+        } else {
+          setError({
+            message: "Failed While Loading Data ",
+            info: "Please Try Again ",
+          });
+        }
+      }
+    });
+  }, []);
+  useEffect(() => {
+    // fetch only when user details are not present
+    if (!BarberInfos || BarberInfos.length === 0) {
+      fetchUserDetails();
+    }
+  }, [BarberInfos, fetchUserDetails]);
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
     try {
-      const resp = axios.post("/reservation", {
-        ReservationClientName: name,
-        ReservationClientPhoneNumber: PhoneNumber,
-        ReservationClientEmail: email,
-        ReservationClientAppointmentDate: Date,
-        ReservationClientBarberName: BarberName,
-        ReservationClientServiceChosen: Service,
-      });
-      Swal.fire({
-        icon: "success",
-        title: "Appointment Booked !",
-        text: "Your Appointment has been booked , see you soon !",
-      });
+      axios({
+        method: "POST",
+        url: "/reservation",
+        headers: { "Content-Type": "application/json" },
+        data: JSON.stringify({
+          ReservationClientName: name,
+          ReservationClientPhoneNumber: PhoneNumber,
+          ReservationClientEmail: email,
+          ReservationClientAppointmentDate: Date,
+          ReservationClientBarberName: BarberName,
+          ReservationClientServiceChosen: Service,
+        }),
+        withCredentials: true,
+      })
+        .then(async (response) => {
+          const data = await response.data;
+          Swal.fire({
+            icon: "success",
+            title: data.message,
+            text: data.info,
+          });
+          setBarberName("");
+          setName("");
+          setPhoneNumber("");
+          setService("");
+          setDate("");
+          setBarberInfos("");
+          setEmail("");
+        })
+        .catch((er) => {
+          setError({
+            message: er.response.data.message,
+            info: er.response.data.info,
+          });
+        });
     } catch (error) {
-      console.log(error.response);
-      Swal.fire({
-        icon: "errorIconHtml",
-        title: "Oups !",
-        text: "Please Try Again!",
+      setError({
+        message: "Something went wrong :(",
+        info: error,
       });
     }
   };
-
+  if (ErrorMsg) {
+    Swal.fire({
+      icon: "error",
+      title: ErrorMsg.message,
+      text: ErrorMsg.info,
+    });
+  }
   return (
     <div className="mainSection">
       <div className="cardOverlay">
@@ -85,7 +151,8 @@ export default function Main() {
                 />
                 <input
                   type="datetime-local"
-                  step="900"
+                  step="1800"
+                  min={today}
                   name="ReservationClientAppointmentDate"
                   id="appointmentDate"
                   onChange={(e) => setDate(e.target.value)}
@@ -102,11 +169,13 @@ export default function Main() {
                   required
                 />
                 <datalist id="barberList">
-                  <option value="Jack" />
-                  <option value="Ania" />
-                  <option value="Barber No 3" />
-                  <option value="Barber No 4" />
-                  <option value="Barber No 5" />
+                  {!BarberInfos || BarberInfos.length === 0 ? (
+                    <option value="Loading Barbers" />
+                  ) : (
+                    BarberInfos.barbers.map((barber) => {
+                      return <option value={barber} />;
+                    })
+                  )}
                 </datalist>
                 <input
                   type="text"
@@ -118,13 +187,14 @@ export default function Main() {
                   onChange={(e) => setService(e.target.value)}
                   required
                 />
-
                 <datalist id="Services">
-                  <option value="Haircut" />
-                  <option value="Barber Cut" />
-                  <option value="Haircut Cut No 3" />
-                  <option value="Haircut Cut No 4" />
-                  <option value="Haircut Cut No 5" />
+                  {!BarberInfos || BarberInfos.length === 0 ? (
+                    <option value="Loading Services..." />
+                  ) : (
+                    BarberInfos.services.map((service) => {
+                      return <option value={service} />;
+                    })
+                  )}
                 </datalist>
 
                 <button type="submit" className="btn btnBook">
