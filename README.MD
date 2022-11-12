@@ -29,15 +29,20 @@ Employee should be able to:
 Admin should be able to:
 
 - Check all the appointments
--
 - Register a new employee
 - Edit his profile and login settings
+- Check Employees List
+- Reset EmployeeLogin by creating a new password
 
 ### Screenshot
 
-![](./screenshots/mainDashb%20oard.png)
+![](./screenshots/welcomepage.png)
 ![](./screenshots/loginPage.png)
-![](./screenshots?/dashboard.png)
+![](./screenshots/mainDashboard.png)
+![](./screenshots/order.png)
+![](./screenshots/manageServices.png)
+![](./screenshots/EditProfile.png)
+![](./screenshots/RegisterProfile.png)
 
 More Screenshots are available in the Screenshots folder
 
@@ -55,5 +60,5 @@ More Screenshots are available in the Screenshots folder
 
 ## Author
 
-- Website - [Aymen's Portfolio](https://www.your-site.com)
+- Website - [Aymen's Portfolio](https://www.aymendev1.com)
 - LinkedIn- [@aymanazougar](https://www.linkedin.com/in/aymanazougar/)
