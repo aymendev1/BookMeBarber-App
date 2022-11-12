@@ -36,7 +36,7 @@ Admin should be able to:
 
 ### Screenshot
 
-![](./screenshots/welcomepage.png)
+![](./screenshots/welcomePage.png)
 ![](./screenshots/loginPage.png)
 ![](./screenshots/mainDashboard.png)
 ![](./screenshots/order.png)
